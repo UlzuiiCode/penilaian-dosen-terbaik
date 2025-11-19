@@ -8,6 +8,7 @@ import Landing from "./pages/Landing";
 import Penilaian from "./pages/Penilaian";
 import Dashboard from "./pages/Dashboard";
 import ProfilDosen from "./pages/ProfilDosen";
+import ManajemenDosen from "./pages/ManajemenDosen";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/penilaian" element={<Penilaian />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profil/:id" element={<ProfilDosen />} />
+          <Route path="/manajemen" element={<ManajemenDosen />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
