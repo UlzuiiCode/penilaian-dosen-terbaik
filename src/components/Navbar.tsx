@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { GraduationCap, BarChart3, ClipboardCheck, User } from 'lucide-react';
+import { GraduationCap, BarChart3, ClipboardCheck, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
@@ -8,7 +8,8 @@ const Navbar = () => {
   const navItems = [
     { path: '/', label: 'Beranda', icon: GraduationCap },
     { path: '/penilaian', label: 'Penilaian', icon: ClipboardCheck },
-    { path: '/dashboard', label: 'Dashboard', icon: BarChart3 }
+    { path: '/dashboard', label: 'Dashboard', icon: BarChart3 },
+    { path: '/manajemen', label: 'Kelola Dosen', icon: Settings }
   ];
 
   return (
