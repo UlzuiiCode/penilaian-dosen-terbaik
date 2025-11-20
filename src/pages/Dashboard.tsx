@@ -32,12 +32,10 @@ const Dashboard = () => {
   };
 
   const handleResetPenilaian = () => {
-    // Hapus semua penilaian dan reset ke data dummy awal
-    localStorage.removeItem('penilaian');
-    localStorage.removeItem('dosen');
-    initializeDummyData();
+    // Hapus semua penilaian menjadi kosong
+    localStorage.setItem('penilaian', JSON.stringify([]));
     loadData();
-    toast.success('Penilaian berhasil direset ke data awal');
+    toast.success('Semua penilaian berhasil dihapus');
   };
 
   const statistik = getStatistikUmum(hasilRanking);
@@ -89,9 +87,9 @@ const Dashboard = () => {
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Reset Penilaian Dashboard?</AlertDialogTitle>
+                    <AlertDialogTitle>Hapus Semua Penilaian?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Tindakan ini akan menghapus semua data penilaian dan mengembalikan ke data awal. 
+                      Tindakan ini akan menghapus semua data penilaian menjadi kosong (nilai 0). 
                       Semua penilaian yang telah diinput akan hilang dan tidak dapat dikembalikan.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
