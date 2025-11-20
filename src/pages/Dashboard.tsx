@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { HasilRanking, Dosen, Penilaian } from '@/types/dosen';
 import { hitungRankingDosen, getStatistikUmum, getRataRataPerKriteria, KRITERIA } from '@/lib/spk';
 import { initializeDummyData } from '@/lib/dummyData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
-import { Trophy, TrendingUp, Users, Award } from 'lucide-react';
+import { Trophy, TrendingUp, Users, Award, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const COLORS = ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#DBEAFE'];
 
@@ -16,6 +18,10 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = () => {
     initializeDummyData();
     const dosen: Dosen[] = JSON.parse(localStorage.getItem('dosen') || '[]');
     const penilaian: Penilaian[] = JSON.parse(localStorage.getItem('penilaian') || '[]');
@@ -23,7 +29,16 @@ const Dashboard = () => {
     const hasil = hitungRankingDosen(dosen, penilaian);
     setHasilRanking(hasil);
     setLoading(false);
-  }, []);
+  };
+
+  const handleResetPenilaian = () => {
+    // Hapus semua penilaian dan reset ke data dummy awal
+    localStorage.removeItem('penilaian');
+    localStorage.removeItem('dosen');
+    initializeDummyData();
+    loadData();
+    toast.success('Penilaian berhasil direset ke data awal');
+  };
 
   const statistik = getStatistikUmum(hasilRanking);
   const rataRataKriteria = getRataRataPerKriteria(hasilRanking);
@@ -61,7 +76,35 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-b from-secondary/30 to-background py-12">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 animate-fade-in">
-          <h1 className="text-4xl font-bold mb-3">Dashboard Ranking Dosen</h1>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex-1"></div>
+            <h1 className="text-4xl font-bold flex-1">Dashboard Ranking Dosen</h1>
+            <div className="flex-1 flex justify-end">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <RotateCcw className="h-4 w-4" />
+                    Reset Penilaian
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Reset Penilaian Dashboard?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Tindakan ini akan menghapus semua data penilaian dan mengembalikan ke data awal. 
+                      Semua penilaian yang telah diinput akan hilang dan tidak dapat dikembalikan.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleResetPenilaian}>
+                      Ya, Reset
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </div>
           <p className="text-lg text-muted-foreground">
             Hasil analisis menggunakan metode Weighted Product (WP)
           </p>
